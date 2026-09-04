@@ -1,0 +1,2085 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Article Motion Studio</title>
+  <meta name="description" content="Article Motion Studio — Commercial Animation Design">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-light: #111111;
+      --bg-card: #141414;
+      --text: #e8e6e1;
+      --text-dim: #5a5a5a;
+      --text-mid: #888888;
+      --accent: #c4a882;
+      --border: rgba(255,255,255,0.05);
+      --border-light: rgba(255,255,255,0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Noise grain */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.02;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ========== NAV ========== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 28px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      mix-blend-mode: difference;
+    }
+
+    .nav a, .nav button {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav a:hover, .nav button:hover { opacity: 0.5; }
+
+    /* ========== HERO ========== */
+    .hero {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 48px 120px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-bg img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+
+    .hero-bg img.active { opacity: 0.75; }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.1) 40%, rgba(10,10,10,0.6) 100%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+    }
+
+    .hero-title {
+      font-size: clamp(48px, 8vw, 120px);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .hero-title .line {
+      display: block;
+      overflow: hidden;
+    }
+
+    .hero-title .line span {
+      display: inline-block;
+      animation: slideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+      transform: translateY(100%);
+    }
+
+    .hero-title .line:nth-child(1) span { animation-delay: 0.3s; }
+    .hero-title .line:nth-child(2) span { animation-delay: 0.45s; }
+    .hero-title .line:nth-child(3) span { animation-delay: 0.6s; }
+
+    @keyframes slideUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-desc {
+      font-size: 13px;
+      line-height: 2;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+      max-width: 400px;
+      opacity: 0;
+      animation: fadeIn 1s ease 0.9s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* ========== WORK SECTIONS ========== */
+    .work-section {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 80px 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .work-section-inner {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .work-section:nth-child(even) .work-section-inner {
+      grid-template-columns: 1fr 1.2fr;
+    }
+
+    .work-section:nth-child(even) .work-image { order: 2; }
+    .work-section:nth-child(even) .work-text { order: 1; text-align: right; align-items: flex-end; }
+
+    .work-image {
+      position: relative;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      background: var(--bg-light);
+    }
+
+    .work-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.6;
+      transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .work-image:hover img { opacity: 1; transform: scale(1.03); }
+
+    .work-text {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .work-num { font-size: 11px; font-weight: 500; letter-spacing: 0.2em; color: var(--accent); }
+    .work-name { font-size: clamp(24px, 3vw, 40px); font-weight: 300; line-height: 1.2; letter-spacing: -0.01em; text-transform: uppercase; }
+    .work-desc { font-size: 14px; line-height: 2; color: var(--text-mid); max-width: 400px; }
+    .work-tag { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+
+    .work-section:nth-child(3) .work-text { padding-top: 60px; }
+    .work-section:nth-child(4) .work-text { padding-bottom: 40px; }
+    .work-section:nth-child(5) .work-text { padding-top: 100px; }
+    .work-section:nth-child(6) .work-text { padding-bottom: 80px; }
+    .work-section:nth-child(7) .work-text { padding-top: 40px; }
+    .work-section:nth-child(8) .work-text { padding-bottom: 120px; }
+    .work-section:nth-child(9) .work-text { padding-top: 80px; }
+    .work-section:nth-child(10) .work-text { padding-bottom: 60px; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ========== OVERLAY PAGES ========== */
+    .overlay-page {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      overflow-y: auto;
+    }
+
+    .overlay-page.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .overlay-header {
+      padding: 120px 48px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 1px solid var(--border);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .overlay-header-title {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .overlay-close {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    .overlay-close:hover { opacity: 0.5; }
+
+    /* ========== ABOUT 11 — Sticky narrative + Timeline rail ========== */
+    .about11-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 48px 120px;
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 100px;
+      position: relative;
+    }
+
+    /* Left: Sticky Narrative */
+    .about11-narrative {
+      position: relative;
+    }
+
+    .about11-narrative-inner {
+      position: sticky;
+      top: 120px;
+    }
+
+    .about11-headline {
+      font-size: clamp(28px, 3.5vw, 48px);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+
+    .about11-headline .line {
+      display: block;
+      overflow: hidden;
+    }
+
+    .about11-headline .line span {
+      display: inline-block;
+    }
+
+    .about11-body p {
+      font-size: 13px;
+      line-height: 2.2;
+      color: var(--text-mid);
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .about11-body p.zh-text {
+      text-transform: none;
+      font-family: 'Noto Sans SC', 'Inter', sans-serif;
+      letter-spacing: 0.02em;
+      color: var(--text-dim);
+    }
+
+    .about11-clients {
+      margin-top: 60px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .about11-clients-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+
+    .about11-clients-list {
+      font-size: 13px;
+      line-height: 2;
+      color: var(--text-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Right: Timeline Rail */
+    .about11-timeline {
+      position: relative;
+      padding-left: 40px;
+    }
+
+    /* The drawn rail — a vertical line with hand-drawn feel */
+    .about11-rail {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, 
+        transparent 0%, 
+        var(--border-light) 5%, 
+        var(--border-light) 95%, 
+        transparent 100%);
+    }
+
+    .about11-rail::before {
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(196, 168, 130, 0.15) 10%,
+        rgba(196, 168, 130, 0.15) 90%,
+        transparent 100%);
+      filter: blur(2px);
+    }
+
+    /* Milestone chapters */
+    .about11-milestone {
+      position: relative;
+      padding-bottom: 80px;
+      opacity: 0;
+      transform: translateX(30px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .about11-milestone.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .about11-milestone:last-child { padding-bottom: 0; }
+
+    /* Varied chapter styles */
+    .about11-milestone[data-chapter="01"] .about11-milestone-content { padding-left: 0; }
+    .about11-milestone[data-chapter="02"] .about11-milestone-content { padding-left: 20px; }
+    .about11-milestone[data-chapter="03"] .about11-milestone-content { padding-left: 40px; }
+    .about11-milestone[data-chapter="04"] .about11-milestone-content { padding-left: 10px; }
+    .about11-milestone[data-chapter="05"] .about11-milestone-content { padding-left: 30px; }
+    .about11-milestone[data-chapter="06"] .about11-milestone-content { padding-left: 50px; }
+    .about11-milestone[data-chapter="07"] .about11-milestone-content { padding-left: 15px; }
+
+    /* Node on the rail */
+    .about11-milestone-node {
+      position: absolute;
+      left: -40px;
+      top: 4px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about11-node-ring {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--border-light);
+      border-radius: 50%;
+      transition: all 0.4s ease;
+    }
+
+    .about11-node-ring-accent {
+      border-color: var(--accent);
+      opacity: 0.5;
+    }
+
+    .about11-node-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--text-dim);
+      border-radius: 50%;
+      transition: all 0.4s ease;
+    }
+
+    .about11-node-dot-accent {
+      background: var(--accent);
+      width: 8px;
+      height: 8px;
+    }
+
+    .about11-milestone:hover .about11-node-ring {
+      border-color: var(--accent);
+      transform: scale(1.3);
+    }
+
+    .about11-milestone:hover .about11-node-dot {
+      background: var(--accent);
+    }
+
+    /* Milestone content */
+    .about11-milestone-content {
+      transition: padding-left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .about11-milestone-num {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .about11-milestone-year {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .about11-milestone-title {
+      font-size: clamp(18px, 2vw, 28px);
+      font-weight: 300;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .about11-milestone-desc {
+      font-size: 13px;
+      line-height: 2;
+      color: var(--text-mid);
+      max-width: 480px;
+    }
+
+    /* ========== BLOG (Features 4) ========== */
+    .features4-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 60px 48px 120px;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 80px;
+      min-height: calc(100vh - 200px);
+    }
+
+    .features4-tabs {
+      position: sticky;
+      top: 120px;
+      height: fit-content;
+    }
+
+    .features4-tab {
+      display: block;
+      width: 100%;
+      padding: 20px 0;
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+    }
+
+    .features4-tab::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: var(--accent);
+      transition: height 0.4s ease;
+    }
+
+    .features4-tab.active::before { height: 60%; }
+
+    .features4-tab-num {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+      transition: color 0.4s ease;
+    }
+
+    .features4-tab.active .features4-tab-num { color: var(--accent); }
+
+    .features4-tab-title {
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      transition: color 0.4s ease;
+    }
+
+    .features4-tab.active .features4-tab-title,
+    .features4-tab:hover .features4-tab-title { color: var(--text); }
+
+    .features4-tab-date {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .features4-content { position: relative; min-height: 500px; }
+
+    .features4-panel {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .features4-panel.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .features4-panel-image {
+      width: 100%;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      margin-bottom: 40px;
+      background: var(--bg-light);
+    }
+
+    .features4-panel-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.7;
+      transition: opacity 0.6s ease;
+    }
+
+    .features4-panel.active .features4-panel-image img { opacity: 1; }
+
+    .features4-panel-title {
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 300;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .features4-panel-meta {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 32px;
+    }
+
+    .features4-panel-body {
+      font-size: 14px;
+      line-height: 2;
+      color: var(--text-mid);
+      max-width: 600px;
+    }
+
+    .features4-panel-body p { margin-bottom: 20px; }
+
+    .features4-progress {
+      position: absolute;
+      bottom: -40px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .features4-progress-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .features4-nav {
+      display: flex;
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .features4-nav-btn {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 10px 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .features4-nav-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ========== FOOTER ========== */
+    .site-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 24px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      mix-blend-mode: difference;
+    }
+
+    .site-footer span,
+    .site-footer a,
+    .site-footer button {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      text-decoration: none;
+      text-transform: uppercase;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    .site-footer a:hover,
+    .site-footer button:hover { opacity: 0.5; }
+
+    .site-footer-divider {
+      margin: 0 12px;
+      opacity: 0.3;
+    }
+
+    /* ========== MOBILE ========== */
+    
+    /* ========== CONTACT 2 — Two-column layout ========== */
+    .contact2-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 48px 120px;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 100px;
+      min-height: calc(100vh - 200px);
+    }
+
+    /* Left: Company Info */
+    .contact2-info {
+      position: relative;
+    }
+
+    .contact2-info-inner {
+      position: sticky;
+      top: 120px;
+    }
+
+    .contact2-headline {
+      font-size: clamp(32px, 4vw, 56px);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    .contact2-headline .line {
+      display: block;
+      overflow: hidden;
+    }
+
+    .contact2-headline .line span {
+      display: inline-block;
+    }
+
+    .contact2-desc {
+      margin-bottom: 48px;
+    }
+
+    .contact2-desc p {
+      font-size: 14px;
+      line-height: 2;
+      color: var(--text-mid);
+      margin-bottom: 20px;
+    }
+
+    .contact2-desc p.zh-text {
+      font-family: 'Noto Sans SC', 'Inter', sans-serif;
+      color: var(--text-dim);
+    }
+
+    .contact2-details {
+      margin-bottom: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .contact2-detail {
+      margin-bottom: 24px;
+    }
+
+    .contact2-detail-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+
+    .contact2-detail-value {
+      font-size: 14px;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.3s ease;
+      position: relative;
+      display: inline-block;
+    }
+
+    a.contact2-detail-value::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    a.contact2-detail-value:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    a.contact2-detail-value:hover {
+      color: var(--accent);
+    }
+
+    .contact2-social {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .contact2-social-link {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .contact2-social-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .contact2-social-link:hover {
+      color: var(--text);
+    }
+
+    .contact2-social-link:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    /* Right: Contact Form */
+    .contact2-form {
+      position: relative;
+    }
+
+    .contact2-form-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .contact2-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .contact2-field {
+      margin-bottom: 32px;
+    }
+
+    .contact2-field-full {
+      grid-column: 1 / -1;
+    }
+
+    .contact2-field-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    .contact2-field-input,
+    .contact2-field-textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+      font-size: 14px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.3s ease;
+      border-radius: 0;
+    }
+
+    .contact2-field-input::placeholder,
+    .contact2-field-textarea::placeholder {
+      color: var(--text-dim);
+      opacity: 0.5;
+    }
+
+    .contact2-field-input:focus,
+    .contact2-field-textarea:focus {
+      border-bottom-color: var(--accent);
+    }
+
+    .contact2-field-textarea {
+      resize: vertical;
+      min-height: 120px;
+      line-height: 1.8;
+    }
+
+    .contact2-form-footer {
+      margin-top: 16px;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .contact2-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: transparent;
+      border: 1px solid var(--border);
+      padding: 16px 40px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .contact2-submit:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      padding-right: 48px;
+    }
+
+    .contact2-submit svg {
+      transition: transform 0.4s ease;
+    }
+
+    .contact2-submit:hover svg {
+      transform: translateX(4px);
+    }
+
+    
+    /* ========== WORK DETAIL (Behance-style) ========== */
+    .work-detail-hero {
+      position: relative;
+      width: 100%;
+      height: 80vh;
+      min-height: 500px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .work-detail-hero-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.8;
+    }
+
+    .work-detail-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.5) 60%, rgba(10,10,10,0.9) 100%);
+    }
+
+    .work-detail-close {
+      position: absolute;
+      top: 28px;
+      right: 48px;
+      z-index: 10;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .work-detail-close:hover {
+      background: rgba(255,255,255,0.1);
+      transform: rotate(90deg);
+    }
+
+    .work-detail-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 48px 60px;
+      max-width: 900px;
+    }
+
+    .work-detail-num {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .work-detail-title {
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .work-detail-meta {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .work-detail-body {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 48px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 80px;
+    }
+
+    .work-detail-sidebar {
+      position: sticky;
+      top: 120px;
+      height: fit-content;
+    }
+
+    .work-detail-info-block {
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .work-detail-info-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+    }
+
+    .work-detail-info-value {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .work-detail-main {
+      max-width: 800px;
+    }
+
+    .work-detail-intro {
+      font-size: 18px;
+      line-height: 2;
+      color: var(--text-mid);
+      margin-bottom: 64px;
+      font-weight: 300;
+    }
+
+    .work-detail-intro p {
+      margin-bottom: 24px;
+    }
+
+    .work-detail-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-bottom: 80px;
+    }
+
+    .work-detail-img-full {
+      width: 100%;
+      overflow: hidden;
+      background: var(--bg-light);
+    }
+
+    .work-detail-img-full img {
+      width: 100%;
+      height: auto;
+      display: block;
+      opacity: 0.9;
+      transition: opacity 0.4s ease;
+    }
+
+    .work-detail-img-full img:hover {
+      opacity: 1;
+    }
+
+    .work-detail-img-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .work-detail-img-pair img {
+      width: 100%;
+      height: auto;
+      display: block;
+      opacity: 0.9;
+      transition: opacity 0.4s ease;
+      background: var(--bg-light);
+    }
+
+    .work-detail-img-pair img:hover {
+      opacity: 1;
+    }
+
+    .work-detail-letter {
+      padding: 48px;
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+    }
+
+    .work-detail-letter-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 32px;
+    }
+
+    .work-detail-letter-body {
+      font-size: 15px;
+      line-height: 2.2;
+      color: var(--text-mid);
+    }
+
+    .work-detail-letter-body p {
+      margin-bottom: 20px;
+    }
+
+    .work-detail-signature {
+      margin-top: 32px;
+      font-style: italic;
+      color: var(--text);
+      font-size: 16px;
+    }
+
+    .work-detail-footer {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 48px 40px;
+    }
+
+    .work-detail-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: transparent;
+      border: 1px solid var(--border);
+      padding: 14px 32px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .work-detail-nav-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .work-detail-nav-btn svg {
+      transition: transform 0.3s ease;
+    }
+
+    .work-detail-nav-btn:hover svg {
+      transform: translateX(-4px);
+    }
+
+    @media (max-width: 900px) {
+      .work-detail-hero { height: 60vh; }
+      .work-detail-hero-content { padding: 0 24px 40px; }
+      .work-detail-close { right: 24px; top: 20px; }
+      .work-detail-body {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 40px 24px;
+      }
+      .work-detail-sidebar {
+        position: relative;
+        top: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+      .work-detail-info-block {
+        margin-bottom: 0;
+        padding-bottom: 16px;
+      }
+      .work-detail-img-pair {
+        grid-template-columns: 1fr;
+      }
+      .work-detail-letter { padding: 32px 24px; }
+      .work-detail-footer { padding: 0 24px 40px; }
+    }
+@media (max-width: 1024px) {
+      .contact2-container {
+        grid-template-columns: 1fr;
+        gap: 60px;
+      }
+
+      .contact2-info-inner {
+        position: relative;
+        top: 0;
+      }
+
+      .contact2-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+    }
+@media (max-width: 1024px) {
+      .about11-container {
+        grid-template-columns: 1fr;
+        gap: 60px;
+      }
+
+      .about11-narrative-inner {
+        position: relative;
+        top: 0;
+      }
+
+      .about11-timeline {
+        padding-left: 30px;
+      }
+
+      .about11-milestone-node {
+        left: -30px;
+      }
+
+      .features4-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .features4-tabs {
+        position: relative;
+        top: 0;
+        display: flex;
+        overflow-x: auto;
+        gap: 16px;
+        padding-bottom: 16px;
+      }
+
+      .features4-tab {
+        flex-shrink: 0;
+        width: auto;
+        padding: 12px 16px;
+        border-bottom: none;
+        border: 1px solid var(--border);
+      }
+
+      .features4-tab::before { display: none; }
+
+      .features4-content { min-height: auto; }
+
+      .features4-panel {
+        position: relative;
+        opacity: 1;
+        transform: none;
+        pointer-events: all;
+        display: none;
+      }
+
+      .features4-panel.active { display: block; }
+    }
+
+    @media (max-width: 768px) {
+      .nav, .hero, .work-section, .site-footer,
+      .overlay-header, .about11-container, .features4-container {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .work-section-inner,
+      .work-section:nth-child(even) .work-section-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .work-section:nth-child(even) .work-image,
+      .work-section:nth-child(even) .work-text {
+        order: unset;
+      }
+
+      .work-section:nth-child(even) .work-text {
+        text-align: left;
+        align-items: flex-start;
+      }
+
+      .work-text { padding-top: 0 !important; padding-bottom: 0 !important; }
+      .hero-title { font-size: clamp(36px, 10vw, 72px); }
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--text-dim); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<!-- Nav — match.studio copy: About (left) / Write (right) -->
+<nav class="nav">
+  <button onclick="openAbout()">About</button>
+  <button onclick="openContact()">Write</button>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1920&q=85" class="active" alt="">
+    <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=85" alt="">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1920&q=85" alt="">
+    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&q=85" alt="">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">
+      <span class="line"><span>ARTICLE</span></span>
+      <span class="line"><span>MOTION</span></span>
+      <span class="line"><span>STUDIO</span></span>
+    </h1>
+    <p class="hero-desc">
+      Commercial animation design studio.<br>
+      TVC · Motion Graphics · Promo<br>
+      竞界动画工作室
+    </p>
+  </div>
+</section>
+
+<!-- ========== WORK 001 ========== -->
+<section class="work-section reveal" id="work-001">
+  <div class="work-section-inner">
+    <div class="work-image">
+      <img src="images/work001_01.png" alt="001" onclick="openWorkDetail()" style="cursor:pointer;">
+    </div>
+    <div class="work-text">
+      <div class="work-num">001</div>
+      <div class="work-name">Best Wish from the Earth and the Universe</div>
+      <div class="work-desc">An animated letter from astrophysicist Neil deGrasse Tyson to Ronald, a young boy with epilepsy who dreams of becoming an astronaut. A story of encouragement, passion, and the boundless reach of human ambition.</div>
+      <div class="work-tag">Motion Graphics / Animation / 2024</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WORK 002 ========== -->
+<section class="work-section reveal" id="work-002">
+  <div class="work-section-inner">
+    <div class="work-image">
+      <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1200&q=80" alt="002">
+    </div>
+    <div class="work-text">
+      <div class="work-num">002</div>
+      <div class="work-name">Toyota Product Launch</div>
+      <div class="work-desc">High-end 3D product visualization for Toyota's latest vehicle lineup. Photorealistic renders paired with cinematic camera work to highlight engineering precision and design innovation.</div>
+      <div class="work-tag">Promo / 3D Animation / 2024</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WORK 003 ========== -->
+<section class="work-section reveal" id="work-003">
+  <div class="work-section-inner">
+    <div class="work-image">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200&q=80" alt="003">
+    </div>
+    <div class="work-text">
+      <div class="work-num">003</div>
+      <div class="work-name">Motion Reel 2024</div>
+      <div class="work-desc">Our annual showreel showcasing the breadth of our capabilities — from character animation to abstract motion design, demonstrating versatility across styles and mediums.</div>
+      <div class="work-tag">Showreel / Mixed Media / 2024</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WORK 004 ========== -->
+<section class="work-section reveal" id="work-004">
+  <div class="work-section-inner">
+    <div class="work-image">
+      <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80" alt="004">
+    </div>
+    <div class="work-text">
+      <div class="work-num">004</div>
+      <div class="work-name">Brand Identity Animation</div>
+      <div class="work-desc">Comprehensive motion identity system for a tech startup. Logo animations, transition language, and UI motion guidelines that scale across digital touchpoints.</div>
+      <div class="work-tag">Motion Graphics / Branding / 2023</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WORK 005 ========== -->
+<section class="work-section reveal" id="work-005">
+  <div class="work-section-inner">
+    <div class="work-image">
+      <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&q=80" alt="005">
+    </div>
+    <div class="work-text">
+      <div class="work-num">005</div>
+      <div class="work-name">Product Visualization</div>
+      <div class="work-desc">Detailed 3D product renders for e-commerce and commercial use. Every material, reflection, and shadow calibrated to achieve photorealistic fidelity at 4K resolution.</div>
+      <div class="work-tag">3D / Commercial / 2023</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WORK 006 ========== -->
+<section class="work-section reveal" id="work-006">
+  <div class="work-section-inner">
+    <div class="work-image">
+      <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&q=80" alt="006">
+    </div>
+    <div class="work-text">
+      <div class="work-num">006</div>
+      <div class="work-name">Corporate Promo</div>
+      <div class="work-desc">Documentary-style corporate video blending interviews with aerial cinematography and motion graphics overlays. Told the company's 20-year journey in under three minutes.</div>
+      <div class="work-tag">Video / Documentary / 2023</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WORK 007 ========== -->
+<section class="work-section reveal" id="work-007">
+  <div class="work-section-inner">
+    <div class="work-image">
+      <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=1200&q=80" alt="007">
+    </div>
+    <div class="work-text">
+      <div class="work-num">007</div>
+      <div class="work-name">Social Media Campaign</div>
+      <div class="work-desc">A series of 15-second animated shorts optimized for social platforms. Bold typography, fast cuts, and vibrant color palettes designed for maximum scroll-stopping impact.</div>
+      <div class="work-tag">Short Form / Animation / 2024</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WORK 008 ========== -->
+<section class="work-section reveal" id="work-008">
+  <div class="work-section-inner">
+    <div class="work-image">
+      <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=1200&q=80" alt="008">
+    </div>
+    <div class="work-text">
+      <div class="work-num">008</div>
+      <div class="work-name">Event Opening Title</div>
+      <div class="work-desc">Cinematic title sequence for a major tech conference opening. Abstract particle systems and fluid simulations created an atmosphere of innovation and forward momentum.</div>
+      <div class="work-tag">Title Sequence / Motion / 2024</div>
+    </div>
+  </div>
+</section>
+
+<div style="height: 80px;"></div>
+
+<!-- ========== ABOUT 11 OVERLAY ========== -->
+<div class="overlay-page" id="aboutPage">
+  <div class="overlay-header">
+    <span class="overlay-header-title">About — Article Motion</span>
+    <button class="overlay-close" onclick="closeAbout()">Close</button>
+  </div>
+
+  <div class="about11-container">
+    <!-- Left: Sticky Narrative -->
+    <div class="about11-narrative">
+      <div class="about11-narrative-inner">
+        <h2 class="about11-headline">
+          <span class="line"><span>WELCOME TO</span></span>
+          <span class="line"><span>ARTICLE MOTION</span></span>
+          <span class="line"><span>STUDIO</span></span>
+        </h2>
+        <div class="about11-body">
+          <p>ARTICLE MOTION STUDIO IS A COMMERCIAL ANIMATION DESIGN STUDIO BASED IN CHINA. WE SPECIALIZE IN TVC, PROMOTIONAL VIDEOS, MOTION GRAPHICS, AND BRAND VISUAL CONTENT.</p>
+          <p class="zh-text">竞界动画工作室专注于商业动画设计，业务涵盖 TVC、宣传片、品牌视频、Motion Graphics 等领域。以风格多样的创意设计与扎实的动画技术，为每一个项目注入独特的视觉生命力。</p>
+          <p>OUR APPROACH COMBINES DIVERSE CREATIVE STYLES WITH SOLID ANIMATION TECHNIQUES, ENSURING THAT EVERY PROJECT RECEIVES THE ATTENTION AND EXPERTISE NECESSARY TO STAND OUT.</p>
+        </div>
+        <div class="about11-clients">
+          <div class="about11-clients-label">Selected Clients</div>
+          <div class="about11-clients-list">Lululemon · Toyota · Brand Partners · Advertising Agencies · Production Companies</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Timeline Rail -->
+    <div class="about11-timeline">
+      <div class="about11-rail"></div>
+
+      <div class="about11-milestone" data-chapter="01">
+        <div class="about11-milestone-node">
+          <div class="about11-node-ring"></div>
+          <div class="about11-node-dot"></div>
+        </div>
+        <div class="about11-milestone-content">
+          <div class="about11-milestone-num">01</div>
+          <div class="about11-milestone-year">2018</div>
+          <div class="about11-milestone-title">Studio Founded</div>
+          <div class="about11-milestone-desc">Article Motion Studio was established with a clear mission: to bring cinematic quality to commercial animation. Two founders, one vision, zero compromises.</div>
+        </div>
+      </div>
+
+      <div class="about11-milestone" data-chapter="02">
+        <div class="about11-milestone-node">
+          <div class="about11-node-ring"></div>
+          <div class="about11-node-dot"></div>
+        </div>
+        <div class="about11-milestone-content">
+          <div class="about11-milestone-num">02</div>
+          <div class="about11-milestone-year">2019</div>
+          <div class="about11-milestone-title">First Major Brand</div>
+          <div class="about11-milestone-desc">Landed our first Fortune 500 client. The project demanded a level of polish we had never attempted — and we delivered. That set the standard for everything that followed.</div>
+        </div>
+      </div>
+
+      <div class="about11-milestone" data-chapter="03">
+        <div class="about11-milestone-node">
+          <div class="about11-node-ring about11-node-ring-accent"></div>
+          <div class="about11-node-dot about11-node-dot-accent"></div>
+        </div>
+        <div class="about11-milestone-content">
+          <div class="about11-milestone-num">03</div>
+          <div class="about11-milestone-year">2020</div>
+          <div class="about11-milestone-title">Motion Reel Launch</div>
+          <div class="about11-milestone-desc">Released our first annual showreel. It traveled further than expected — featured on motion design blogs, shared by industry peers, and opened doors to projects we had only dreamed of.</div>
+        </div>
+      </div>
+
+      <div class="about11-milestone" data-chapter="04">
+        <div class="about11-milestone-node">
+          <div class="about11-node-ring"></div>
+          <div class="about11-node-dot"></div>
+        </div>
+        <div class="about11-milestone-content">
+          <div class="about11-milestone-num">04</div>
+          <div class="about11-milestone-year">2021</div>
+          <div class="about11-milestone-title">3D Pipeline Built</div>
+          <div class="about11-milestone-desc">Invested heavily in 3D capabilities — new hardware, new software, new talent. Product visualization became a core offering, and our renders started competing with the best in the industry.</div>
+        </div>
+      </div>
+
+      <div class="about11-milestone" data-chapter="05">
+        <div class="about11-milestone-node">
+          <div class="about11-node-ring"></div>
+          <div class="about11-node-dot"></div>
+        </div>
+        <div class="about11-milestone-content">
+          <div class="about11-milestone-num">05</div>
+          <div class="about11-milestone-year">2022</div>
+          <div class="about11-milestone-title">International Reach</div>
+          <div class="about11-milestone-desc">Projects started coming from outside China. Language barriers became creative opportunities. We learned that great animation needs no translation — it speaks directly to the eye.</div>
+        </div>
+      </div>
+
+      <div class="about11-milestone" data-chapter="06">
+        <div class="about11-milestone-node">
+          <div class="about11-node-ring about11-node-ring-accent"></div>
+          <div class="about11-node-dot about11-node-dot-accent"></div>
+        </div>
+        <div class="about11-milestone-content">
+          <div class="about11-milestone-num">06</div>
+          <div class="about11-milestone-year">2024</div>
+          <div class="about11-milestone-title">Team Expansion</div>
+          <div class="about11-milestone-desc">Grew from a duo to a team of eight. Each member brought a distinct specialty — character animation, fluid simulation, compositing, sound design. The studio became greater than the sum of its parts.</div>
+        </div>
+      </div>
+
+      <div class="about11-milestone" data-chapter="07">
+        <div class="about11-milestone-node">
+          <div class="about11-node-ring"></div>
+          <div class="about11-node-dot"></div>
+        </div>
+        <div class="about11-milestone-content">
+          <div class="about11-milestone-num">07</div>
+          <div class="about11-milestone-year">2026</div>
+          <div class="about11-milestone-title">Today & Beyond</div>
+          <div class="about11-milestone-desc">Now serving brands, agencies, and production companies worldwide. The tools evolve, the team grows, but the mission remains: make every frame count. The next chapter is being written now.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height: 120px;"></div>
+</div>
+
+<!-- ========== BLOG OVERLAY (Features 4) ========== -->
+<div class="overlay-page" id="blogPage">
+  <div class="overlay-header">
+    <span class="overlay-header-title">Blog — Article Motion</span>
+    <button class="overlay-close" onclick="closeBlog()">Close</button>
+  </div>
+
+  <div class="features4-container">
+    <div class="features4-tabs">
+      <button class="features4-tab active" data-index="0" onclick="selectTab(0)">
+        <div class="features4-tab-num">001</div>
+        <div class="features4-tab-title">The Craft of Motion</div>
+        <div class="features4-tab-date">Sep 02, 2026</div>
+      </button>
+      <button class="features4-tab" data-index="1" onclick="selectTab(1)">
+        <div class="features4-tab-num">002</div>
+        <div class="features4-tab-title">Behind the Reel</div>
+        <div class="features4-tab-date">Aug 15, 2026</div>
+      </button>
+      <button class="features4-tab" data-index="2" onclick="selectTab(2)">
+        <div class="features4-tab-num">003</div>
+        <div class="features4-tab-title">Color in Animation</div>
+        <div class="features4-tab-date">Jul 28, 2026</div>
+      </button>
+      <button class="features4-tab" data-index="3" onclick="selectTab(3)">
+        <div class="features4-tab-num">004</div>
+        <div class="features4-tab-title">Client Collaboration</div>
+        <div class="features4-tab-date">Jul 10, 2026</div>
+      </button>
+      <button class="features4-tab" data-index="4" onclick="selectTab(4)">
+        <div class="features4-tab-num">005</div>
+        <div class="features4-tab-title">Tools We Use</div>
+        <div class="features4-tab-date">Jun 22, 2026</div>
+      </button>
+      <button class="features4-tab" data-index="5" onclick="selectTab(5)">
+        <div class="features4-tab-num">006</div>
+        <div class="features4-tab-title">Sound Design</div>
+        <div class="features4-tab-date">Jun 05, 2026</div>
+      </button>
+    </div>
+
+    <div class="features4-content">
+      <div class="features4-panel active" data-index="0">
+        <div class="features4-panel-image">
+          <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200&q=80" alt="">
+        </div>
+        <div class="features4-panel-title">The Craft of Motion</div>
+        <div class="features4-panel-meta">Sep 02, 2026 · Process</div>
+        <div class="features4-panel-body">
+          <p>Motion design is not merely about making things move. It is about giving meaning to movement, creating a visual language that communicates intent before a single word is read.</p>
+          <p>At Article Motion, every project begins with a question: what should the audience feel? From there, we build systems of motion — easing curves, timing ratios, spatial relationships — that guide the viewer through an emotional arc.</p>
+          <p>The best motion work is invisible. It does not announce itself; it simply makes the experience feel right. This is the standard we hold ourselves to on every frame.</p>
+        </div>
+        <div class="features4-nav">
+          <button class="features4-nav-btn" onclick="prevTab()">Previous</button>
+          <button class="features4-nav-btn" onclick="nextTab()">Next</button>
+        </div>
+        <div class="features4-progress"><div class="features4-progress-bar" id="progressBar"></div></div>
+      </div>
+
+      <div class="features4-panel" data-index="1">
+        <div class="features4-panel-image">
+          <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1200&q=80" alt="">
+        </div>
+        <div class="features4-panel-title">Behind the Reel</div>
+        <div class="features4-panel-meta">Aug 15, 2026 · Studio</div>
+        <div class="features4-panel-body">
+          <p>Our 2024 showreel represents six months of curated work, distilled into ninety seconds. The selection process was brutal — favorites were cut, experiments were shelved, and only the work that best represented our range made the final cut.</p>
+          <p>What remains is a portrait of the studio: diverse in style, consistent in quality, and unafraid to experiment. From photorealistic product renders to abstract motion studies, the reel demonstrates that animation is a medium, not a genre.</p>
+        </div>
+        <div class="features4-nav">
+          <button class="features4-nav-btn" onclick="prevTab()">Previous</button>
+          <button class="features4-nav-btn" onclick="nextTab()">Next</button>
+        </div>
+        <div class="features4-progress"><div class="features4-progress-bar" id="progressBar1"></div></div>
+      </div>
+
+      <div class="features4-panel" data-index="2">
+        <div class="features4-panel-image">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200&q=80" alt="">
+        </div>
+        <div class="features4-panel-title">Color in Animation</div>
+        <div class="features4-panel-meta">Jul 28, 2026 · Design</div>
+        <div class="features4-panel-body">
+          <p>Color is the first thing an audience processes, and the last thing they remember. In motion design, color does not merely decorate — it directs attention, establishes hierarchy, and encodes emotion.</p>
+          <p>We approach color with the same rigor as typography or composition. Every palette is tested against the brand, the medium, and the cultural context. A color that works on a dark cinema screen may fail on a bright mobile display.</p>
+          <p>The most successful projects are those where color becomes a character in its own right, moving and breathing with the animation.</p>
+        </div>
+        <div class="features4-nav">
+          <button class="features4-nav-btn" onclick="prevTab()">Previous</button>
+          <button class="features4-nav-btn" onclick="nextTab()">Next</button>
+        </div>
+        <div class="features4-progress"><div class="features4-progress-bar" id="progressBar2"></div></div>
+      </div>
+
+      <div class="features4-panel" data-index="3">
+        <div class="features4-panel-image">
+          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80" alt="">
+        </div>
+        <div class="features4-panel-title">Client Collaboration</div>
+        <div class="features4-panel-meta">Jul 10, 2026 · Process</div>
+        <div class="features4-panel-body">
+          <p>The best client relationships are partnerships. We do not execute briefs — we interrogate them, expand them, and sometimes challenge them. The goal is not to deliver what was asked, but to deliver what was needed.</p>
+          <p>Our process is built on transparency. Clients see work in progress, not just finished frames. This requires trust, but it produces better results. When a client understands why a decision was made, they can provide feedback that improves the work rather than diluting it.</p>
+        </div>
+        <div class="features4-nav">
+          <button class="features4-nav-btn" onclick="prevTab()">Previous</button>
+          <button class="features4-nav-btn" onclick="nextTab()">Next</button>
+        </div>
+        <div class="features4-progress"><div class="features4-progress-bar" id="progressBar3"></div></div>
+      </div>
+
+      <div class="features4-panel" data-index="4">
+        <div class="features4-panel-image">
+          <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&q=80" alt="">
+        </div>
+        <div class="features4-panel-title">Tools We Use</div>
+        <div class="features4-panel-meta">Jun 22, 2026 · Tech</div>
+        <div class="features4-panel-body">
+          <p>Our pipeline is tool-agnostic. We use After Effects for motion graphics, Cinema 4D for 3D, and Houdini for simulations. But the tool is never the point — the idea is.</p>
+          <p>What matters is fluency. A designer who knows one tool deeply will outperform one who knows many superficially. We invest in deep expertise, then connect those experts into teams that can tackle any challenge.</p>
+        </div>
+        <div class="features4-nav">
+          <button class="features4-nav-btn" onclick="prevTab()">Previous</button>
+          <button class="features4-nav-btn" onclick="nextTab()">Next</button>
+        </div>
+        <div class="features4-progress"><div class="features4-progress-bar" id="progressBar4"></div></div>
+      </div>
+
+      <div class="features4-panel" data-index="5">
+        <div class="features4-panel-image">
+          <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&q=80" alt="">
+        </div>
+        <div class="features4-panel-title">Sound Design</div>
+        <div class="features4-panel-meta">Jun 05, 2026 · Audio</div>
+        <div class="features4-panel-body">
+          <p>Sound is half the experience. A beautifully animated sequence with poor audio feels cheap; a simple animation with great sound feels expensive. We treat audio as a design discipline, not an afterthought.</p>
+          <p>Our sound design process runs parallel to visual development. We sketch audio concepts early, refine them alongside the visuals, and mix them with the same attention to detail we apply to every frame.</p>
+        </div>
+        <div class="features4-nav">
+          <button class="features4-nav-btn" onclick="prevTab()">Previous</button>
+          <button class="features4-nav-btn" onclick="nextTab()">Next</button>
+        </div>
+        <div class="features4-progress"><div class="features4-progress-bar" id="progressBar5"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height: 80px;"></div>
+</div>
+
+<!-- ========== CONTACT OVERLAY (Contact 2 — Two-column) ========== -->
+<div class="overlay-page" id="contactPage">
+  <div class="overlay-header">
+    <span class="overlay-header-title">Write — Article Motion</span>
+    <button class="overlay-close" onclick="closeContact()">Close</button>
+  </div>
+
+  <div class="contact2-container">
+    <!-- Left: Company Info -->
+    <div class="contact2-info">
+      <div class="contact2-info-inner">
+        <h2 class="contact2-headline">
+          <span class="line"><span>LET'S</span></span>
+          <span class="line"><span>CREATE</span></span>
+          <span class="line"><span>TOGETHER</span></span>
+        </h2>
+
+        <div class="contact2-desc">
+          <p>Have a project in mind? We'd love to hear about it. Drop us a line and let's discuss how we can bring your vision to life through animation.</p>
+          <p class="zh-text">有项目想法？我们很乐意倾听。给我们留言，讨论如何通过动画将您的愿景变为现实。</p>
+        </div>
+
+        <div class="contact2-details">
+          <div class="contact2-detail">
+            <div class="contact2-detail-label">Email</div>
+            <a href="mailto:hello@articlemotion.com" class="contact2-detail-value">hello@articlemotion.com</a>
+          </div>
+          <div class="contact2-detail">
+            <div class="contact2-detail-label">Location</div>
+            <div class="contact2-detail-value">Shanghai, China</div>
+          </div>
+          <div class="contact2-detail">
+            <div class="contact2-detail-label">Services</div>
+            <div class="contact2-detail-value">TVC · Motion Graphics · 3D · Promo</div>
+          </div>
+        </div>
+
+        <div class="contact2-social">
+          <a href="https://www.xinpianchang.com/u10224415" target="_blank" class="contact2-social-link">新片场</a>
+          <a href="https://www.behance.net/articlemotion" target="_blank" class="contact2-social-link">Behance</a>
+          <a href="#" onclick="alert('Coming soon'); return false;" class="contact2-social-link">Instagram</a>
+          <a href="#" onclick="alert('Coming soon'); return false;" class="contact2-social-link">Vimeo</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Contact Form -->
+    <div class="contact2-form">
+      <form class="contact2-form-inner" onsubmit="event.preventDefault(); alert('Form demo - not connected');">
+        <div class="contact2-form-row">
+          <div class="contact2-field">
+            <label class="contact2-field-label">Name</label>
+            <input type="text" class="contact2-field-input" placeholder="Your name" required>
+          </div>
+          <div class="contact2-field">
+            <label class="contact2-field-label">Email</label>
+            <input type="email" class="contact2-field-input" placeholder="your@email.com" required>
+          </div>
+        </div>
+
+        <div class="contact2-form-row">
+          <div class="contact2-field">
+            <label class="contact2-field-label">Company</label>
+            <input type="text" class="contact2-field-input" placeholder="Your company">
+          </div>
+          <div class="contact2-field">
+            <label class="contact2-field-label">Subject</label>
+            <input type="text" class="contact2-field-input" placeholder="Project inquiry">
+          </div>
+        </div>
+
+        <div class="contact2-field contact2-field-full">
+          <label class="contact2-field-label">Message</label>
+          <textarea class="contact2-field-textarea" placeholder="Tell us about your project — timeline, budget, style references, anything that helps us understand what you're looking for." rows="6" required></textarea>
+        </div>
+
+        <div class="contact2-form-footer">
+          <button type="submit" class="contact2-submit">
+            <span>Send Message</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div style="height: 120px;"></div>
+</div>
+<!-- ========== WORK DETAIL OVERLAY (Behance-style) ========== -->
+<div class="overlay-page" id="workDetailPage">
+  <div class="work-detail-hero">
+    <button class="work-detail-close" onclick="closeWorkDetail()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+    <img src="images/work001_01.png" alt="Cover" class="work-detail-hero-img">
+    <div class="work-detail-hero-overlay"></div>
+    <div class="work-detail-hero-content">
+      <div class="work-detail-num">001</div>
+      <h1 class="work-detail-title">Best Wish from the Earth and the Universe</h1>
+      <div class="work-detail-meta">Motion Graphics / Animation / 2024</div>
+    </div>
+  </div>
+
+  <div class="work-detail-body">
+    <!-- Sidebar Info -->
+    <div class="work-detail-sidebar">
+      <div class="work-detail-info-block">
+        <div class="work-detail-info-label">Client</div>
+        <div class="work-detail-info-value">Personal Project</div>
+      </div>
+      <div class="work-detail-info-block">
+        <div class="work-detail-info-label">Year</div>
+        <div class="work-detail-info-value">2024</div>
+      </div>
+      <div class="work-detail-info-block">
+        <div class="work-detail-info-label">Role</div>
+        <div class="work-detail-info-value">Animation · Motion Design · Storytelling</div>
+      </div>
+      <div class="work-detail-info-block">
+        <div class="work-detail-info-label">Tools</div>
+        <div class="work-detail-info-value">After Effects · Illustrator</div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="work-detail-main">
+      <div class="work-detail-intro">
+        <p>A letter from Neil deGrasse Tyson, the astrophysicist, replied to Ronald who was suffering from epilepsy but aspired to be an astronaut. He was often ridiculed by his classmates. The astrophysicist encouraged Ronald to keep his passion, find like-minded friends and wish him a bright future.</p>
+      </div>
+
+      <div class="work-detail-gallery">
+        <div class="work-detail-img-full">
+          <img src="images/work001_02.png" alt="Frame 02">
+        </div>
+        <div class="work-detail-img-full">
+          <img src="images/work001_03.png" alt="Frame 03">
+        </div>
+        <div class="work-detail-img-pair">
+          <img src="images/work001_04.png" alt="Frame 04">
+          <img src="images/work001_05.png" alt="Frame 05">
+        </div>
+        <div class="work-detail-img-full">
+          <img src="images/work001_06.png" alt="Frame 06">
+        </div>
+        <div class="work-detail-img-full">
+          <img src="images/work001_07.png" alt="Frame 07">
+        </div>
+        <div class="work-detail-img-pair">
+          <img src="images/work001_08.png" alt="Frame 08">
+          <img src="images/work001_09.png" alt="Frame 09">
+        </div>
+        <div class="work-detail-img-full">
+          <img src="images/work001_10.png" alt="Frame 10">
+        </div>
+        <div class="work-detail-img-full">
+          <img src="images/work001_11.png" alt="Frame 11">
+        </div>
+      </div>
+
+      <div class="work-detail-letter">
+        <div class="work-detail-letter-label">The Letter</div>
+        <div class="work-detail-letter-body">
+          <p>Dear Ronald,</p>
+          <p>Thank you for candidly sharing your struggles, and thank you too, for your passion for space.</p>
+          <p>In my own circles, "Space Intern" is a title worn with pride, and being a "Tech Geek" is nothing less than a badge of honor. Don't forget—the world's wealthiest man, Bill Gates, is a self-proclaimed tech geek. So is NASA Administrator Michael Griffin. And so am I. So, when your classmates tease you about your love for space, just remember that there are thousands of people just like you all over the world—and we understand you. Furthermore, never forget that it is only those who possess true passion and unwavering persistence who go on to achieve great things.</p>
+          <p>As for your occasional seizures—yes, they may indeed prevent you from becoming an astronaut. But ultimately, epilepsy is no different from many other common medical conditions. You may need to take prescription medication over the long term to keep it under control, but it will not diminish your intelligence, nor will it stop you from becoming a mathematician, an engineer, or a scientist. You could even design aircraft and spacecraft; even if you cannot personally venture into space, your work could still stand at the very forefront of scientific discovery.</p>
+          <p>Please remember: behind every single astronaut in space, there stand thousands of scientists and engineers.</p>
+          <p>Based on your return address, I noticed that you live in the Rocky Mountain region. Colorado Springs happens to be the headquarters of the Space Foundation—an organization that runs a great many programs—and I strongly encourage you to pay them a visit. If you are willing to make the trip, I'd bet you'll return home with a whole box full of cool goodies: pens, posters, pins, paperweights, and other items perfect for science fairs. I can say this with such confidence because I serve on the Space Foundation's Board of Directors, and every time I visit their headquarters, I bring back a box full of cool stuff myself!</p>
+          <p>If you do go, you are sure to meet kindred spirits at the Space Foundation headquarters—people who couldn't care less about the snide remarks of foolish classmates—and you will share a wonderful time together, however brief that time may be.</p>
+          <p>Sending you my very best wishes—from here on Earth, and across the universe.</p>
+          <p class="work-detail-signature">Neil deGrasse Tyson</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="work-detail-footer">
+    <button class="work-detail-nav-btn" onclick="closeWorkDetail()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 8H4M4 8L8 4M4 8L8 12"/>
+      </svg>
+      <span>Back to Works</span>
+    </button>
+  </div>
+
+  <div style="height: 80px;"></div>
+</div>
+<!-- ========== FOOTER ========== -->
+<footer class="site-footer">
+  <span>© 2026</span>
+  <div>
+    <button onclick="openAbout()">About</button>
+    <span class="site-footer-divider">·</span>
+    <button onclick="openBlog()">Blog</button>
+    <span class="site-footer-divider">·</span>
+    <button onclick="openContact()">Contact</button>
+  </div>
+</footer>
+
+<script>
+  // ========== HERO BACKGROUND ROTATION ==========
+  const heroImages = document.querySelectorAll('.hero-bg img');
+  let currentHero = 0;
+  setInterval(() => {
+    heroImages[currentHero].classList.remove('active');
+    currentHero = (currentHero + 1) % heroImages.length;
+    heroImages[currentHero].classList.add('active');
+  }, 4000);
+
+  // ========== REVEAL ON SCROLL ==========
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+  reveals.forEach(el => revealObserver.observe(el));
+
+  // ========== ABOUT 11 MILESTONE REVEAL ==========
+  const milestones = document.querySelectorAll('.about11-milestone');
+  const milestoneObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+  milestones.forEach(el => milestoneObserver.observe(el));
+
+  // ========== OVERLAY PAGE MANAGEMENT ==========
+  function openOverlay(id) {
+    document.querySelectorAll('.overlay-page').forEach(p => p.classList.remove('open'));
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+    if (id === 'blogPage') startAutoCycle();
+  }
+
+  function closeAllOverlays() {
+    document.querySelectorAll('.overlay-page').forEach(p => p.classList.remove('open'));
+    document.body.style.overflow = '';
+    stopAutoCycle();
+  }
+
+  function openAbout() { openOverlay('aboutPage'); }
+  function closeAbout() { closeAllOverlays(); }
+  function openBlog() { openOverlay('blogPage'); }
+  function closeBlog() { closeAllOverlays(); }
+  function openContact() { openOverlay('contactPage'); }
+  function closeContact() { closeAllOverlays(); }
+
+  // ========== BLOG FEATURES 4 AUTO-CYCLE ==========
+  let currentTab = 0;
+  const totalTabs = 6;
+  let progressInterval = null;
+  const cycleDuration = 6000;
+  const progressUpdateRate = 50;
+
+  function selectTab(index) {
+    currentTab = index;
+    document.querySelectorAll('.features4-tab').forEach((tab, i) => tab.classList.toggle('active', i === index));
+    document.querySelectorAll('.features4-panel').forEach((panel, i) => panel.classList.toggle('active', i === index));
+    resetProgress();
+  }
+
+  function nextTab() { selectTab((currentTab + 1) % totalTabs); }
+  function prevTab() { selectTab((currentTab - 1 + totalTabs) % totalTabs); }
+
+  function resetProgress() {
+    if (progressInterval) clearInterval(progressInterval);
+    document.querySelectorAll('.features4-progress-bar').forEach(bar => bar.style.width = '0%');
+    let progress = 0;
+    const increment = (progressUpdateRate / cycleDuration) * 100;
+    progressInterval = setInterval(() => {
+      progress += increment;
+      if (progress >= 100) { progress = 0; nextTab(); }
+      const activeBar = document.querySelector('.features4-panel.active .features4-progress-bar');
+      if (activeBar) activeBar.style.width = progress + '%';
+    }, progressUpdateRate);
+  }
+
+  function startAutoCycle() { stopAutoCycle(); resetProgress(); }
+  function stopAutoCycle() { if (progressInterval) { clearInterval(progressInterval); progressInterval = null; } }
+
+  document.querySelector('.features4-container')?.addEventListener('mouseenter', stopAutoCycle);
+  document.querySelector('.features4-container')?.addEventListener('mouseleave', startAutoCycle);
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAllOverlays();
+    if (!document.getElementById('blogPage').classList.contains('open')) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); nextTab(); }
+    else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); prevTab(); }
+  });
+
+  // ========== WORK DETAIL ==========
+  function openWorkDetail() {
+    document.getElementById('workDetailPage').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    window.scrollTo(0, 0);
+  }
+
+  function closeWorkDetail() {
+    document.getElementById('workDetailPage').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+</script>
+
+</body>
+</html>
