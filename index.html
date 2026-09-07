@@ -202,6 +202,8 @@
     }
 
     .work-image:hover img { opacity: 1; transform: scale(1.03); }
+    .work-image video { width:100%; height:100%; object-fit:cover; opacity:0.6; transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+    .work-image:hover video { opacity:1; transform: scale(1.03); }
 
     .work-text {
       display: flex;
@@ -1376,7 +1378,7 @@
 <section class="work-section reveal" id="work-001">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work001_01.png" alt="001" onclick="openWorkDetail()" style="cursor:pointer;">
+      <img src="images/work001_01.png" alt="001" loading="lazy" decoding="async" onclick="openWorkDetail()" style="cursor:pointer;">
     </div>
     <div class="work-text">
       <div class="work-num">001</div>
@@ -1391,7 +1393,7 @@
 <section class="work-section reveal" id="work-002">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work002_01.jpg" alt="002" >
+      <img src="images/work002_01.jpg" alt="002" loading="lazy" decoding="async" >
     </div>
     <div class="work-text">
       <div class="work-num">002</div>
@@ -1406,7 +1408,7 @@
 <section class="work-section reveal" id="work-003">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work003_01.png" alt="003" >
+      <img src="images/work003_01.png" alt="003" loading="lazy" decoding="async" >
     </div>
     <div class="work-text">
       <div class="work-num">003</div>
@@ -1421,7 +1423,7 @@
 <section class="work-section reveal" id="work-004">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work004.gif" alt="004" >
+      <video class="work-card-media" src="images/work004.mp4" poster="images/work004_p.jpg" autoplay muted loop playsinline preload="metadata"></video>
     </div>
     <div class="work-text">
       <div class="work-num">004</div>
@@ -1436,7 +1438,7 @@
 <section class="work-section reveal" id="work-005">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work005_01.png" alt="005" >
+      <img src="images/work005_01.png" alt="005" loading="lazy" decoding="async" >
     </div>
     <div class="work-text">
       <div class="work-num">005</div>
@@ -1451,7 +1453,7 @@
 <section class="work-section reveal" id="work-006">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work006.gif" alt="006" >
+      <video class="work-card-media" src="images/work006.mp4" poster="images/work006_p.jpg" autoplay muted loop playsinline preload="metadata"></video>
     </div>
     <div class="work-text">
       <div class="work-num">006</div>
@@ -1466,7 +1468,7 @@
 <section class="work-section reveal" id="work-007">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work007_01.png" alt="007" >
+      <img src="images/work007_01.png" alt="007" loading="lazy" decoding="async" >
     </div>
     <div class="work-text">
       <div class="work-num">007</div>
@@ -1481,7 +1483,7 @@
 <section class="work-section reveal" id="work-008">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work008_01.png" alt="008" >
+      <img src="images/work008_01.png" alt="008" loading="lazy" decoding="async" >
     </div>
     <div class="work-text">
       <div class="work-num">008</div>
@@ -1496,7 +1498,7 @@
 <section class="work-section reveal" id="work-009">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work009_01.jpg" alt="009" >
+      <img src="images/work009_01.jpg" alt="009" loading="lazy" decoding="async" >
     </div>
     <div class="work-text">
       <div class="work-num">009</div>
@@ -1511,7 +1513,7 @@
 <section class="work-section reveal" id="work-010">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work010.gif" alt="010" >
+      <video class="work-card-media" src="images/work010.mp4" poster="images/work010_p.jpg" autoplay muted loop playsinline preload="metadata"></video>
     </div>
     <div class="work-text">
       <div class="work-num">010</div>
@@ -1526,7 +1528,7 @@
 <section class="work-section reveal" id="work-011">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work011.gif" alt="011" >
+      <video class="work-card-media" src="images/work011.mp4" poster="images/work011_p.jpg" autoplay muted loop playsinline preload="metadata"></video>
     </div>
     <div class="work-text">
       <div class="work-num">011</div>
@@ -1541,7 +1543,7 @@
 <section class="work-section reveal" id="work-012">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work012_01.png" alt="012" >
+      <img src="images/work012_01.png" alt="012" loading="lazy" decoding="async" >
     </div>
     <div class="work-text">
       <div class="work-num">012</div>
@@ -1556,7 +1558,7 @@
 <section class="work-section reveal" id="work-013">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work013_01.jpg" alt="013" >
+      <img src="images/work013_01.jpg" alt="013" loading="lazy" decoding="async" >
     </div>
     <div class="work-text">
       <div class="work-num">013</div>
@@ -1571,7 +1573,7 @@
 <section class="work-section reveal" id="work-014">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work014_01.jpg" alt="014" >
+      <img src="images/work014_01.jpg" alt="014" loading="lazy" decoding="async" >
     </div>
     <div class="work-text">
       <div class="work-num">014</div>
@@ -1586,7 +1588,7 @@
 <section class="work-section reveal" id="work-015">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work015_01.jpg" alt="015" >
+      <img src="images/work015_01.jpg" alt="015" loading="lazy" decoding="async" >
     </div>
     <div class="work-text">
       <div class="work-num">015</div>
@@ -1601,7 +1603,7 @@
 <section class="work-section reveal" id="work-016">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work016_01.jpg" alt="016" >
+      <img src="images/work016_01.jpg" alt="016" loading="lazy" decoding="async" >
     </div>
     <div class="work-text">
       <div class="work-num">016</div>
@@ -1616,7 +1618,7 @@
 <section class="work-section reveal" id="work-017">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work017_01.png" alt="017" >
+      <img src="images/work017_01.png" alt="017" loading="lazy" decoding="async" >
     </div>
     <div class="work-text">
       <div class="work-num">017</div>
@@ -2279,7 +2281,8 @@ const WORK_MEDIA = {
     tags: 'Animation / Documentary / 2023',
     year: '2023',
     desc: `"一个基因可以为一个国家带来希望，一粒种子可以造福万千苍生。" — 钟扬。影片表现一个遥远、未知的奇特世界，植物学家展开的一段神奇浪漫的探索历程。年轻的植物学家跋山涉水，收集濒危种植物的种子。这些种子将储存上百年，完成人类未来的梦想。`,
-    images: ['images/work012_01.png','images/work012_02.png','images/work012_03.gif','images/work012_04.gif','images/work012_05.gif','images/work012_06.gif'],
+    images: ['images/work012_01.png','images/work012_02.png'],
+    videos: ['images/work012_03.mp4','images/work012_04.mp4','images/work012_05.mp4','images/work012_06.mp4'],
     video: 'images/work012.mp4'
   },
   '013': {
@@ -2287,7 +2290,8 @@ const WORK_MEDIA = {
     tags: 'Motion Graphics / 2023',
     year: '2023',
     desc: `A stylized animation blending humor and heart, crafted with meticulous attention to character performance and timing.`,
-    images: ['images/work013_01.jpg','images/work013.gif']
+    images: ['images/work013_01.jpg'],
+    videos: ['images/work013.mp4']
   },
   '014': {
     title: 'Visual Essay',
@@ -2346,7 +2350,9 @@ function openWorkDynamic(num) {
   const hero = w.images[0] || '';
   const gallery = w.images.map(src =>
     `<div class="work-detail-img-full"><img loading="lazy" src="${src}" alt="${w.title}"></div>`
-  ).join('');
+  ).concat((w.videos || []).map(src =>
+    `<div class="work-detail-img-full"><video controls preload="none" poster="${hero}" src="${src}"></video></div>`
+  )).join('');
 
   const video = w.video
     ? `<div class="work-detail-img-full"><video controls preload="none" poster="${hero}" src="${w.video}"></video></div>`
