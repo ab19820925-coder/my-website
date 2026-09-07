@@ -1391,7 +1391,7 @@
 <section class="work-section reveal" id="work-002">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work002_01.png" alt="002" >
+      <img src="images/work002_01.jpg" alt="002" >
     </div>
     <div class="work-text">
       <div class="work-num">002</div>
@@ -1496,7 +1496,7 @@
 <section class="work-section reveal" id="work-009">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work009_01.png" alt="009" >
+      <img src="images/work009_01.jpg" alt="009" >
     </div>
     <div class="work-text">
       <div class="work-num">009</div>
@@ -1511,7 +1511,7 @@
 <section class="work-section reveal" id="work-010">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work010_01.png" alt="010" >
+      <img src="images/work010_01.jpg" alt="010" >
     </div>
     <div class="work-text">
       <div class="work-num">010</div>
@@ -1526,7 +1526,7 @@
 <section class="work-section reveal" id="work-011">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work011_01.png" alt="011" >
+      <img src="images/work011.mp4" alt="011" >
     </div>
     <div class="work-text">
       <div class="work-num">011</div>
@@ -1556,7 +1556,7 @@
 <section class="work-section reveal" id="work-013">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work013_01.png" alt="013" >
+      <img src="images/work013_01.jpg" alt="013" >
     </div>
     <div class="work-text">
       <div class="work-num">013</div>
@@ -1571,7 +1571,7 @@
 <section class="work-section reveal" id="work-014">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work014_01.png" alt="014" >
+      <img src="images/work014_01.jpg" alt="014" >
     </div>
     <div class="work-text">
       <div class="work-num">014</div>
@@ -1586,7 +1586,7 @@
 <section class="work-section reveal" id="work-015">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work015_01.png" alt="015" >
+      <img src="images/work015_01.jpg" alt="015" >
     </div>
     <div class="work-text">
       <div class="work-num">015</div>
@@ -1601,7 +1601,7 @@
 <section class="work-section reveal" id="work-016">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work016_01.png" alt="016" >
+      <img src="images/work016_01.gif" alt="016" >
     </div>
     <div class="work-text">
       <div class="work-num">016</div>
@@ -2064,7 +2064,7 @@
           <img src="images/work001_10.png" alt="Frame 10">
         </div>
         <div class="work-detail-img-full">
-          <img src="images/work001_11.png" alt="Frame 11">
+          <img src="images/work001_11.gif" alt="Frame 11">
         </div>
       </div>
 
@@ -2213,6 +2213,226 @@
     document.body.style.overflow = '';
   }
 </script>
+<script>
+/* ===== 多图作品 → 详情页弹层 ===== */
 
+const WORK_MEDIA = {
+  '001': {
+    title: 'Best Wish from the Earth and the Universe',
+    tags: 'Motion Graphics / Animation / 2024',
+    year: '2024',
+    client: 'Personal Project',
+    role: 'Animation · Motion Design · Storytelling',
+    tools: 'After Effects · Illustrator',
+    desc: `An animated letter from astrophysicist Neil deGrasse Tyson to Ronald, a young boy with epilepsy who dreams of becoming an astronaut. A story of encouragement, passion, and the boundless reach of human ambition.`,
+    images: ['images/work001_01.png','images/work001_02.png','images/work001_03.png','images/work001_04.png','images/work001_05.png','images/work001_06.png','images/work001_07.png','images/work001_08.png','images/work001_09.png','images/work001_10.png','images/work001_11.gif','images/work001_12.gif','images/work001_13.gif','images/work001_14.gif'],
+    video: 'images/work001.mp4',
+    letter: {
+      label: 'The Letter',
+      text: [
+        'Dear Ronald,',
+        'Thank you for candidly sharing your struggles, and thank you too, for your passion for space.',
+        'In my own circles, "Space Intern" is a title worn with pride, and being a "Tech Geek" is nothing less than a badge of honor. Don\'t forget—the world\'s wealthiest man, Bill Gates, is a self-proclaimed tech geek. So is NASA Administrator Michael Griffin. And so am I. So, when your classmates tease you about your love for space, just remember that there are thousands of people just like you all over the world—and we understand you. Furthermore, never forget that it is only those who possess true passion and unwavering persistence who go on to achieve great things.',
+        'As for your occasional seizures—yes, they may indeed prevent you from becoming an astronaut. But ultimately, epilepsy is no different from many other common medical conditions. You may need to take prescription medication over the long term to keep it under control, but it will not diminish your intelligence, nor will it stop you from becoming a mathematician, an engineer, or a scientist. You could even design aircraft and spacecraft; even if you cannot personally venture into space, your work could still stand at the very forefront of scientific discovery.',
+        'Please remember: behind every single astronaut in space, there stand thousands of scientists and engineers.',
+        'Based on your return address, I noticed that you live in the Rocky Mountain region. Colorado Springs happens to be the headquarters of the Space Foundation—an organization that runs a great many programs—and I strongly encourage you to pay them a visit. If you are willing to make the trip, I\'d bet you\'ll return home with a whole box full of cool goodies: pens, posters, pins, paperweights, and other items perfect for science fairs. I can say this with such confidence because I serve on the Space Foundation\'s Board of Directors, and every time I visit their headquarters, I bring back a box full of cool stuff myself!',
+        'If you do go, you are sure to meet kindred spirits at the Space Foundation headquarters—people who couldn\'t care less about the snide remarks of foolish classmates—and you will share a wonderful time together, however brief that time may be.',
+        'Sending you my very best wishes—from here on Earth, and across the universe.'
+      ],
+      sign: 'Neil deGrasse Tyson'
+    }
+  },
+  '005': {
+    title: 'TOYOTA Intelligent Drive',
+    tags: 'TVC / 3D / Commercial / 2024',
+    year: '2024',
+    desc: `A stylized animation blending humor and heart, crafted with meticulous attention to character performance and timing.`,
+    images: ['images/work005_01.png','images/work005_02.png','images/work005_03.png'],
+    video: 'images/work005.mp4'
+  },
+  '007': {
+    title: 'Lululemon 习练好状态',
+    tags: 'Projection / Event / Motion Graphics / 2024',
+    year: '2024',
+    desc: `World Mental Health Day event wall projection. A celebration of mental wellness through movement and mindfulness.`,
+    images: ['images/work007_01.png','images/work007_02.png','images/work007_03.png','images/work007_04.png','images/work007_05.png','images/work007_06.png','images/work007_7.jpg'],
+    video: 'images/work007.mp4'
+  },
+  '008': {
+    title: 'AI新玩家sheet0',
+    tags: 'Product Promo / Motion Graphics / 2024',
+    year: '2024',
+    desc: `一款数据收集处理的超级工具。A super tool for data collection and processing.`,
+    images: ['images/work008_01.png','images/work008_02.png','images/work008_03.png'],
+    video: 'images/work008.mp4'
+  },
+  '009': {
+    title: 'CREAO Ai',
+    tags: 'Launch Teaser / Motion Graphics / 2024',
+    year: '2024',
+    desc: `CREAO Launch Teaser. A dynamic launch film introducing the next generation of AI creative tools.`,
+    images: ['images/work009_01.jpg','images/work009_02.jpg','images/work009_03.jpg'],
+    video: 'images/work009.m4v'
+  },
+  '012': {
+    title: 'The Seeds Hunter',
+    tags: 'Animation / Documentary / 2023',
+    year: '2023',
+    desc: `"一个基因可以为一个国家带来希望，一粒种子可以造福万千苍生。" — 钟扬。影片表现一个遥远、未知的奇特世界，植物学家展开的一段神奇浪漫的探索历程。年轻的植物学家跋山涉水，收集濒危种植物的种子。这些种子将储存上百年，完成人类未来的梦想。`,
+    images: ['images/work012_01.png','images/work012_02.png','images/work012_03.gif','images/work012_04.gif','images/work012_05.gif','images/work012_06.gif'],
+    video: 'images/work012.mp4'
+  },
+  '014': {
+    title: 'Visual Essay',
+    tags: 'Motion Graphics / Experimental / 2023',
+    year: '2023',
+    desc: `An experimental motion piece pushing the boundaries of visual storytelling through innovative animation techniques.`,
+    images: ['images/work014_01.jpg','images/work014_02.gif','images/work014_03.gif','images/work014_04.gif','images/work014_05.gif','images/work014_06.jpg','images/work014_07.jpg'],
+    video: 'images/work014.mp4'
+  },
+  '015': {
+    title: 'Article Motion Introduction',
+    tags: 'Showreel / Branding / 2024',
+    year: '2024',
+    desc: `Studio introduction and capabilities showcase.`,
+    images: ['images/work015_01.jpg','images/work015_02.jpg','images/work015_03.jpg','images/work015_04.jpg','images/work015_06.jpg','images/work015_07.jpg','images/work015_08.jpg','images/work015_09.jpg'],
+    video: 'images/work015.mp4'
+  },
+  '016': {
+    title: 'Acient Kids',
+    tags: 'Animation / 2023',
+    year: '2023',
+    desc: `A contemplative visual exploration merging poetic imagery with fluid motion design and atmospheric storytelling.`,
+    images: ['images/work016_01.gif','images/work016_02.gif']
+  },
+  '017': {
+    title: 'Tutti VM',
+    tags: 'Product Promo / Motion Graphics / 2024',
+    year: '2024',
+    desc: `Google Docs Moment of Multi-Person and Multi-Agents Collaboration. A product visualization demonstrating seamless collaborative workflows.`,
+    images: ['images/work017_01.png','images/work017_02.png','images/work017_03.png','images/work017_04.png','images/work017_05.png','images/work017_06.png','images/work017_07.png','images/work017_08.png','images/work017_09.png','images/work017_10.png'],
+    video: 'images/work017.mp4'
+  }
+};
+
+/* --- 注入少量样式（详情页视频 / 作品卡片 View 按钮） --- */
+(function () {
+  const css = `
+    .work-cta{ margin-top:8px; align-self:flex-start; background:transparent; border:1px solid var(--border); color:var(--text); font-size:11px; letter-spacing:.1em; text-transform:uppercase; padding:12px 24px; cursor:pointer; transition:all .3s ease; font-family:'Inter',sans-serif; }
+    .work-cta:hover{ border-color:var(--accent); color:var(--accent); }
+    .work-section:nth-child(even) .work-cta{ align-self:flex-end; }
+    .work-section.clickable .work-image{ cursor:pointer; }
+    .work-detail-img-full video{ width:100%; display:block; background:var(--bg-light); }
+  `;
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style);
+})();
+
+/* --- 打开 / 关闭详情弹层 --- */
+let _openWorkNum = null;
+function openWorkDynamic(num) {
+  const w = WORK_MEDIA[num];
+  if (!w) return;
+  _openWorkNum = num;
+
+  const hero = w.images[0] || '';
+  const gallery = w.images.map(src =>
+    `<div class="work-detail-img-full"><img loading="lazy" src="${src}" alt="${w.title}"></div>`
+  ).join('');
+
+  const video = w.video
+    ? `<div class="work-detail-img-full"><video controls preload="none" poster="${hero}" src="${w.video}"></video></div>`
+    : '';
+
+  const letter = w.letter
+    ? `<div class="work-detail-letter">
+         <div class="work-detail-letter-label">${w.letter.label}</div>
+         <div class="work-detail-letter-body">${w.letter.text.map(p => `<p>${p}</p>`).join('')}</div>
+         <div class="work-detail-signature">${w.letter.sign}</div>
+       </div>`
+    : '';
+
+  const info = (label, val) => val
+    ? `<div class="work-detail-info-block"><div class="work-detail-info-label">${label}</div><div class="work-detail-info-value">${val}</div></div>`
+    : '';
+
+  let el = document.getElementById('workDetailDynamic');
+  if (el) el.remove();
+
+  const overlay = document.createElement('div');
+  overlay.className = 'overlay-page';
+  overlay.id = 'workDetailDynamic';
+  overlay.innerHTML = `
+    <div class="work-detail-hero">
+      <img class="work-detail-hero-img" src="${hero}" alt="${w.title}">
+      <div class="work-detail-hero-overlay"></div>
+      <button class="work-detail-close" id="workDetailDynamicClose" aria-label="Close">✕</button>
+      <div class="work-detail-hero-content">
+        <div class="work-detail-num">${num}</div>
+        <div class="work-detail-title">${w.title}</div>
+        <div class="work-detail-meta">${w.tags}</div>
+      </div>
+    </div>
+    <div class="work-detail-body">
+      <div class="work-detail-sidebar">
+        ${info('Client', w.client)}
+        ${info('Year', w.year)}
+        ${info('Role', w.role)}
+        ${info('Tools', w.tools)}
+      </div>
+      <div class="work-detail-main">
+        <div class="work-detail-intro"><p>${w.desc}</p></div>
+        <div class="work-detail-gallery">${gallery}${video}</div>
+        ${letter}
+      </div>
+    </div>
+    <div class="work-detail-footer">
+      <button class="work-detail-nav-btn" id="workDetailDynamicBack">← Back to Works</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  overlay.classList.add('open');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+
+  document.getElementById('workDetailDynamicClose').addEventListener('click', closeWorkDynamic);
+  document.getElementById('workDetailDynamicBack').addEventListener('click', closeWorkDynamic);
+}
+
+function closeWorkDynamic() {
+  const el = document.getElementById('workDetailDynamic');
+  if (el) el.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* --- 给多图作品卡片加“View Project”入口 --- */
+document.querySelectorAll('.work-section').forEach(function (sec) {
+  const num = sec.querySelector('.work-num');
+  if (!num) return;
+  const key = num.textContent.trim();
+  if (!WORK_MEDIA[key]) return; // 单图/无图作品不加详情页
+
+  sec.classList.add('clickable');
+  const textBox = sec.querySelector('.work-text');
+  if (textBox) {
+    const cta = document.createElement('button');
+    cta.className = 'work-cta';
+    cta.textContent = 'View Project →';
+    cta.addEventListener('click', function (e) {
+      e.stopPropagation();
+      openWorkDynamic(key);
+    });
+    textBox.appendChild(cta);
+  }
+  sec.addEventListener('click', function () { openWorkDynamic(key); });
+});
+
+/* ESC 也关闭详情弹层（复用现有键盘逻辑之外的兜底） */
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeWorkDynamic();
+});
+</script>
 </body>
 </html>
