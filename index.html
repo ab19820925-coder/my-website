@@ -1376,7 +1376,7 @@
 <section class="work-section reveal" id="work-001">
   <div class="work-section-inner">
     <div class="work-image">
-      <img src="images/work001_01.png" alt="001" loading="lazy" decoding="async" onclick="openWorkDetail()" style="cursor:pointer;">
+      <img src="images/work001_01.png" alt="001" loading="lazy" decoding="async" >
     </div>
     <div class="work-text">
       <div class="work-num">001</div>
@@ -2329,7 +2329,13 @@ const WORK_MEDIA = {
     .work-cta{ margin-top:8px; align-self:flex-start; background:transparent; border:1px solid var(--border); color:var(--text); font-size:11px; letter-spacing:.1em; text-transform:uppercase; padding:12px 24px; cursor:pointer; transition:all .3s ease; font-family:'Inter',sans-serif; }
     .work-cta:hover{ border-color:var(--accent); color:var(--accent); }
     .work-section:nth-child(even) .work-cta{ align-self:flex-end; }
+    .work-section.clickable{ cursor:pointer; }
     .work-section.clickable .work-image{ cursor:pointer; }
+    .work-section.clickable .work-text{ cursor:pointer; }
+    .work-section.clickable .work-name{ transition: color .3s ease; }
+    .work-section.clickable:hover .work-name{ color: var(--accent); }
+    .work-section.clickable .work-desc{ transition: color .3s ease; }
+    .work-section.clickable:hover .work-desc{ color: var(--accent); }
     .work-detail-img-full video{ width:100%; display:block; background:var(--bg-light); }
   `;
   const style = document.createElement('style');
@@ -2409,6 +2415,19 @@ function openWorkDynamic(num) {
 
   document.getElementById('workDetailDynamicClose').addEventListener('click', closeWorkDynamic);
   document.getElementById('workDetailDynamicBack').addEventListener('click', closeWorkDynamic);
+  /* 点击顶部大图区域，即可关闭详情（✕ 按钮除外） */
+  const heroZone = overlay.querySelector('.work-detail-hero');
+  if (heroZone) {
+    heroZone.style.cursor = 'pointer';
+    heroZone.addEventListener('click', function (e) {
+      if (e.target.closest('.work-detail-close')) return;
+      closeWorkDynamic();
+    });
+  }
+  /* 点击弹层边缘空白，也关闭详情 */
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) closeWorkDynamic();
+  });
 }
 
 function closeWorkDynamic() {
