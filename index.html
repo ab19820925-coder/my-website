@@ -2477,10 +2477,8 @@ document.addEventListener('keydown', function (e) {
 
 <!-- ====== Contact 表单 → FormSubmit（免费，无需后端）====== -->
 <script>
-/* 收件邮箱：只需把下面的 YOUR_EMAIL 改成你的邮箱即可。
-   改好后在网页上发一次测试消息，FormSubmit 会往该邮箱发一封“激活”邮件，
-   点开确认一次，之后所有联系人消息都会转发到这个邮箱。 */
-const CONTACT_EMAIL = 'YOUR_EMAIL'; // ← TODO: 填入你的收件邮箱
+/* 收件邮箱：下面这行就是接收联系人留言的邮箱。 */
+const CONTACT_EMAIL = 'articlemotionstudio@gmail.com';
 
 function sendContact(e) {
   e.preventDefault();
