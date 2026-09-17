@@ -2014,7 +2014,7 @@
         <path d="M18 6L6 18M6 6l12 12"/>
       </svg>
     </button>
-    <img src="images/work001_01.gif" alt="Cover" class="work-detail-hero-img">
+    <img src="images/work001_1.png" alt="Cover" class="work-detail-hero-img">
     <div class="work-detail-hero-overlay"></div>
     <div class="work-detail-hero-content">
       <div class="work-detail-num">001</div>
@@ -2057,25 +2057,17 @@
         <div class="work-detail-img-full">
           <img src="images/work001_03.png" alt="Frame 03">
         </div>
-        <div class="work-detail-img-pair">
-          <img src="images/work001_04.png" alt="Frame 04">
-          <img src="images/work001_05.png" alt="Frame 05">
-        </div>
         <div class="work-detail-img-full">
           <img src="images/work001_06.png" alt="Frame 06">
         </div>
         <div class="work-detail-img-full">
           <img src="images/work001_07.png" alt="Frame 07">
         </div>
-        <div class="work-detail-img-pair">
-          <img src="images/work001_08.png" alt="Frame 08">
+        <div class="work-detail-img-full">
           <img src="images/work001_09.png" alt="Frame 09">
         </div>
         <div class="work-detail-img-full">
           <img src="images/work001_10.png" alt="Frame 10">
-        </div>
-        <div class="work-detail-img-full">
-          <img src="images/work001_11.png" alt="Frame 11">
         </div>
       </div>
 
@@ -2236,7 +2228,8 @@ const WORK_MEDIA = {
     role: 'Animation · Motion Design · Storytelling',
     tools: 'After Effects · Illustrator',
     desc: `An animated letter from astrophysicist Neil deGrasse Tyson to Ronald, a young boy with epilepsy who dreams of becoming an astronaut. A story of encouragement, passion, and the boundless reach of human ambition.`,
-    images: ['images/work001_01.gif','images/work001_02.png','images/work001_03.png','images/work001_04.png','images/work001_05.png','images/work001_06.png','images/work001_07.png','images/work001_08.png','images/work001_09.png','images/work001_10.png','images/work001_11.png','images/work001_12.gif','images/work001_13.gif','images/work001_14.gif'],
+    hero: 'images/work001_1.png',
+    images: ['images/work001_02.png','images/work001_03.png','images/work001_06.png','images/work001_07.png','images/work001_09.png','images/work001_10.png','images/work001_12.gif','images/work001_13.gif','images/work001_14.gif'],
     video: 'images/work001.mp4',
     letter: {
       label: 'The Letter',
@@ -2361,7 +2354,7 @@ function openWorkDynamic(num) {
   if (!w) return;
   _openWorkNum = num;
 
-  const hero = w.images[0] || '';
+  const hero = w.hero || w.images[0] || '';
   const gallery = w.images.map(src =>
     `<div class="work-detail-img-full"><img loading="lazy" src="${src}" alt="${w.title}"></div>`
   ).concat((w.videos || []).map(src =>
